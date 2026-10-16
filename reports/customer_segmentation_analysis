@@ -1,0 +1,78 @@
+
+# Segment Bazlı Churn Analizi - İş Çıkarımları
+
+
+Cluster 0:
+- Ortalama yaş: 39.5
+- Ortalama bakiye: 1,770 €
+- Churn oranı: %15.03 (en yüksek)
+- Yorum: Orta yaş, yüksek bakiye, düşük kampanya teması → riskli grup
+- Öneri: Sadakat programı, özel faiz teklifleri, düzenli iletişim
+
+Cluster 1:
+- Ortalama yaş: 47.9
+- Ortalama bakiye: 1,820 € (en yüksek)
+- Churn oranı: %13.47
+- Yorum: Yüksek bakiye, ileri yaş, fazla temas olmasına rağmen churn yüksek
+- Öneri: Kişiselleştirilmiş yatırım fırsatları, güven odaklı iletişim
+
+Cluster 2:
+- Ortalama yaş: 40.9
+- Ortalama bakiye: 1,129 € (en düşük)
+- Churn oranı: %9.99 (en düşük)
+- Yorum: Genç, düşük bakiye, düşük temas → memnuniyet yüksek olabilir
+- Öneri: Mevcut memnuniyeti koruma, çapraz satış fırsatları
+
+Genel:
+- Cluster 0 ve 1 churn açısından en riskli segmentler
+- Yüksek bakiye ≠ düşük churn
+- Kampanya temas sayısı tek başına churn’u düşürmeyebilir
+
+ÖZET:
+- KMeans ile k=3 segment belirlendi (silhouette ile).
+- Gerçek churn oranları sıralaması: Cluster 0 > 1 > 2.
+- XGBoost tahminleri (threshold uygulandı) gerçek oranlarla uyumlu.
+
+--- SEGMENT ÖZETLERİ ---
+
+Cluster 0
+- Profil (örn.): Orta yaş ~40, ortalama bakiye ~1.7k€, kampanya teması orta.
+- Churn (gerçek): ~%15.03
+- Churn (model):  ~%17.39
+- Risk Değerlendirmesi: En riskli segment; yüksek bakiye ve orta temas → memnuniyet/teklif uyumu sorunu olabilir.
+- Öneriler:
+  • Sadakat programı + özel faiz/hoşgeldin faizi
+  • Müşteri temsilcisiyle planlı arama (örn. 30/60 gün periyot)
+  • Ürün demeti (mevduat + düşük riskli yatırım fonu) ve kişiselleştirilmiş öneri
+  • Churn uyarı tetikleri: Bakiye düşüşü, şube/temas azalışı
+
+Cluster 1
+- Profil (örn.): Orta-ileri yaş ~48, ortalama bakiye en yüksek (~1.8k€), temas sayısı yüksek.
+- Churn (gerçek): ~%13.47
+- Churn (model):  ~%16.83
+- Risk Değerlendirmesi: Temas fazla olmasına rağmen ikna düşük; içerik kalitesi/hedefleme sorunu olabilir.
+- Öneriler:
+  • “Güven odaklı” içerik: risk düşük yatırım ürünleri, garantili gelir seçenekleri
+  • Ücret/masraf optimizasyonu (kart aidatı muafiyeti, EFT/havale ücretsiz paket)
+  • Kampanya sıklığını azaltıp daha kişisel/uzun vadeli tekliflere geçiş
+  • Yaş segmentine uygun emeklilik/ BES çapraz satış
+
+Cluster 2
+- Profil (örn.): Yaş ~41, ortalama bakiye en düşük (~1.1k€), temas en düşük.
+- Churn (gerçek): ~%9.99
+- Churn (model):  ~%8.84
+- Risk Değerlendirmesi: En düşük churn; maliyet etkin şekilde korunmalı, büyüme potansiyeli orta.
+- Öneriler:
+  • Otomatik/kural tabanlı koruma: düşük maliyetli kampanya bilgilendirmeleri
+  • Kredi kartı limit optimizasyonu, taksit/puan kampanyaları
+  • Çapraz satış: fatura talimatı, dijital cüzdan, mikro tasarruf ürünleri
+
+--- GENEL İÇGÖRÜLER ---
+
+1) “Daha çok temas = daha az churn” her zaman doğru değil → mesaj/teklif uyumu kritik.
+2) Yüksek bakiye segmentlerinde churn hâlâ anlamlı → kayıp değeri yüksek, proaktif bakım şart.
+3) Model tahminleriyle gerçek oranlar uyumlu → segment önceliklendirmesi (0 > 1 > 2) güvenilir.
+4) KPI seti:
+   • Segment bazlı churn % (gerçek & tahmin)
+   • Kampanya kabul oranı, NPS, bakiye trendi
+   • Churn erken uyarı tetikleyicileri (temas sıklığı ↓, bakiye ↓, şikâyet ↑)
